@@ -1,7 +1,6 @@
 #include "SDCardManager.h"
 
 namespace {
-constexpr uint8_t SD_CS = 12;
 constexpr uint32_t SPI_FQ = 40000000;
 }
 
@@ -9,12 +8,12 @@ SDCardManager SDCardManager::instance;
 
 SDCardManager::SDCardManager() : sd() {}
 
-bool SDCardManager::begin() {
-  if (!sd.begin(SD_CS, SPI_FQ)) {
-    if (Serial) Serial.printf("[%lu] [SD] SD card not detected\n", millis());
+bool SDCardManager::begin(uint8_t csPin) {
+  if (!sd.begin(csPin, SPI_FQ)) {
+    if (Serial) Serial.printf("[%lu] [SD] SD card not detected (cs=%u)\n", millis(), csPin);
     initialized = false;
   } else {
-    if (Serial) Serial.printf("[%lu] [SD] SD card detected\n", millis());
+    if (Serial) Serial.printf("[%lu] [SD] SD card detected (cs=%u)\n", millis(), csPin);
     initialized = true;
   }
 

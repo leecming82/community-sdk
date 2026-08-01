@@ -8,7 +8,14 @@
 class SDCardManager {
  public:
   SDCardManager();
-  bool begin();
+
+  // Chip-select for boards where the panel and SD share one SPI bus (X3/X4).
+  static constexpr uint8_t DEFAULT_CS_PIN = 12;
+
+  // Parameterised because not every board puts SD chip-select on GPIO12; HZ5.2 drives a
+  // parallel panel and wires SD chip-select to GPIO44. Defaulted so existing callers are
+  // unaffected.
+  bool begin(uint8_t csPin = DEFAULT_CS_PIN);
   bool ready() const;
   std::vector<String> listFiles(const char* path = "/", int maxFiles = 200);
   // Read the entire file at `path` into a String. Returns empty string on failure.
